@@ -23,4 +23,4 @@ Every layer above is **live on testnet** (Ethereum Sepolia + Solana devnet) with
 end-to-end acceptance verified. **Experimental, testnet-only software** — mainnet is
 gated on circuit/contract audits and a production trusted-setup ceremony.
 
-[Docs](https://docs.opaque.cash) · [Quickstart](https://docs.opaque.cash/quickstart) · per-repo licenses (Apache-2.0 / GPL-3.0 / MIT / CC0)
+[Docs](https://docs.opaque.cash) · [Quickstart](https://docs.opaque.cash/quickstart) · per-repo licenses (Apache-2.0 / GPL-3.0 / AGPL-3.0 / MIT / CC0)
