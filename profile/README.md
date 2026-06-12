@@ -1,47 +1,41 @@
 # Opaque Protocol
 
-Opaque is an open, cross-chain privacy protocol for unlinkable stealth payments and privacy-preserving verifiable reputation. It runs on Ethereum and Solana, with a TypeScript SDK and reference wallet implementations.
+An open, serverless, cross-chain privacy protocol on **Ethereum** and **Solana**:
+payments that can't be linked to you, credentials you can prove without revealing who
+you are. Every layer is specified before its code, so any wallet or dApp can implement
+compatibility — the Opaque apps are reference implementations, not the only ones.
 
-## Core Primitives
+## What it does
 
-**Stealth Payments (DKSAP)**
-Recipients publish a single meta-address (a viewing key and a spending key). Every inbound payment lands at a fresh, one-time address derived on the sender side using secp256k1 ECDH. The sender and recipient are cryptographically unlinkable on-chain. Compatible with EIP-5564 and ERC-6538.
-
-A one-byte view tag lets recipients skip roughly 99.6% of on-chain announcements before any elliptic curve work, making client-side scanning practical at scale.
-
-**Programmable Stealth Reputation (PSR)**
-Schema-bound attestations issued to stealth addresses. Recipients prove traits (KYC status, DAO membership, credit tier) using Groth16 zero-knowledge proofs without revealing their wallet, identity, or unrelated credentials. Nullifier-based Sybil resistance prevents replay across contexts.
-
-**Universal Announcement Bus (UAB)**
-Cross-chain announcement relay over Wormhole. A payment announced on Ethereum can be scanned and swept from Solana, and vice versa, through a compact 96-byte on-chain payload.
+| Layer | In one line | Spec |
+|---|---|---|
+| **Stealth payments** | Every payment lands at a fresh one-time address only the recipient controls (DKSAP, EIP-5564/ERC-6538-compatible; client-side WASM scanning via 1-byte view tags) | [CSAP](https://github.com/opaquecash/spec/blob/main/CSAP.md) |
+| **Stealth reputation (PSR)** | Prove a credential (KYC, membership, score) with a Groth16 ZK proof — without revealing your wallet or other traits | [PSR](https://github.com/opaquecash/spec/blob/main/PSR.md) |
+| **Cross-chain announcements (UAB)** | A payment announced on one chain is scannable from the other, over Wormhole | [UAB](https://github.com/opaquecash/spec/blob/main/UAB.md) |
+| **Naming (ONS)** | `alice.opq.eth` resolves the same meta-address from either chain | [ONS](https://github.com/opaquecash/spec/blob/main/ONS.md) |
+| **Relayer market** | Gas-private on-chain submission through staked, slashable relayers | [relayer-market](https://github.com/opaquecash/spec/blob/main/relayer-market.md) |
+| **Privacy pool** | Amount privacy with association-set compliance proofs (Privacy Pools model — not a mixer) | [privacy-pool](https://github.com/opaquecash/spec/blob/main/privacy-pool.md) |
+| **Conditional disclosure** | M-of-N custodians authorize selective, single-transaction disclosure — the full viewing key never exists in one place (FROST) | [conditional-disclosure](https://github.com/opaquecash/spec/blob/main/conditional-disclosure.md) |
 
 ## Repositories
 
-| Repo | Description |
-|------|-------------|
-| [opaquecash/sdk](https://github.com/opaquecash/sdk) | TypeScript monorepo: 12 packages covering stealth core, chain adapters (EVM + Solana), ZK proving, UAB, balance aggregation, and a unified `OpaqueClient` |
-| [opaquecash/ethereum](https://github.com/opaquecash/ethereum) | Solidity contracts, Hardhat deployment, and reference React wallet |
-| [opaquecash/solana](https://github.com/opaquecash/solana) | Anchor programs, Rust WASM scanner, and reference React wallet |
-| [opaquecash/circuits](https://github.com/opaquecash/circuits) | Circom V2 circuit (canonical), Groth16/BN254, Merkle depth-20; V1 frozen for backward compatibility |
-| [opaquecash/relayer](https://github.com/opaquecash/relayer) | Off-chain relay service for Wormhole VAA delivery to Solana |
-| [opaquecash/spec](https://github.com/opaquecash/spec) | Protocol specifications: CSAP, PSR V2, UAB, and payload format |
-
-## Technical Stack
-
-- **Cryptography:** secp256k1 ECDH, Keccak-256, Groth16 over BN254
-- **ZK verification:** Native on-chain via Solana `alt_bn128` syscalls and Ethereum `ecPairing` precompile
-- **Cross-chain transport:** Wormhole Core (Ethereum Sepolia, Solana devnet)
-- **Browser scanning:** Rust compiled to WASM, no server dependency
-- **Standards:** EIP-5564, ERC-6538, Wormhole VAA format
+| Repo | What |
+|---|---|
+| [spec](https://github.com/opaquecash/spec) | Protocol specifications — start here |
+| [sdk](https://github.com/opaquecash/sdk) | TypeScript SDK (`@opaquecash/*`) — one client for both chains |
+| [ethereum](https://github.com/opaquecash/ethereum) | Solidity contracts (Sepolia) |
+| [solana](https://github.com/opaquecash/solana) | Anchor programs (devnet) |
+| [circuits](https://github.com/opaquecash/circuits) | Groth16/BN254 Circom circuits (canonical, consumed as a submodule) |
+| [scanner](https://github.com/opaquecash/scanner) | Rust DKSAP scanner — native + browser WASM ([crates.io](https://crates.io/crates/opaque-scanner)) |
+| [ons](https://github.com/opaquecash/ons) | ONS canonical registry (ENSIP-10 wildcard resolver) |
+| [relayer](https://github.com/opaquecash/relayer) | `opaque-relayer` node + Wormhole VAA delivery |
+| [app](https://github.com/opaquecash/app) | Reference wallet UI ([opaque.cash](https://opaque.cash)) |
+| [docs](https://github.com/opaquecash/docs) | Developer docs ([docs.opaque.cash](https://docs.opaque.cash)) |
 
 ## Status
 
-The protocol is live on testnet (Ethereum Sepolia and Solana devnet). All contracts are deployed and cross-chain announcement flows in both directions have been verified. The SDK packages are published under the `@opaquecash` scope.
+Every layer above is **live on testnet** (Ethereum Sepolia + Solana devnet) with
+end-to-end acceptance verified. **Experimental, testnet-only software** — mainnet is
+gated on circuit/contract audits and a production trusted-setup ceremony.
 
-Mainnet deployment is gated on a ZK trusted setup ceremony and security review. The software is experimental.
-
-## Links
-
-- Documentation: [docs.opaque.cash](https://docs.opaque.cash)
-- Specification: [spec/](https://github.com/opaquecash/spec)
-- License: Apache-2.0 (SDK, spec), GPLv3 (Ethereum), MIT (Solana), CC0 (circuits), AGPL-3.0 (relayer)
+[Docs](https://docs.opaque.cash) · [Quickstart](https://docs.opaque.cash/quickstart) · per-repo licenses (Apache-2.0 / GPL-3.0 / MIT / CC0)
