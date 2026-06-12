@@ -17,21 +17,6 @@ compatibility — the Opaque apps are reference implementations, not the only on
 | **Privacy pool** | Amount privacy with association-set compliance proofs (Privacy Pools model — not a mixer) | [privacy-pool](https://github.com/opaquecash/spec/blob/main/privacy-pool.md) |
 | **Conditional disclosure** | M-of-N custodians authorize selective, single-transaction disclosure — the full viewing key never exists in one place (FROST) | [conditional-disclosure](https://github.com/opaquecash/spec/blob/main/conditional-disclosure.md) |
 
-## Repositories
-
-| Repo | What |
-|---|---|
-| [spec](https://github.com/opaquecash/spec) | Protocol specifications — start here |
-| [sdk](https://github.com/opaquecash/sdk) | TypeScript SDK (`@opaquecash/*`) — one client for both chains |
-| [ethereum](https://github.com/opaquecash/ethereum) | Solidity contracts (Sepolia) |
-| [solana](https://github.com/opaquecash/solana) | Anchor programs (devnet) |
-| [circuits](https://github.com/opaquecash/circuits) | Groth16/BN254 Circom circuits (canonical, consumed as a submodule) |
-| [scanner](https://github.com/opaquecash/scanner) | Rust DKSAP scanner — native + browser WASM ([crates.io](https://crates.io/crates/opaque-scanner)) |
-| [ons](https://github.com/opaquecash/ons) | ONS canonical registry (ENSIP-10 wildcard resolver) |
-| [relayer](https://github.com/opaquecash/relayer) | `opaque-relayer` node + Wormhole VAA delivery |
-| [app](https://github.com/opaquecash/app) | Reference wallet UI ([opaque.cash](https://opaque.cash)) |
-| [docs](https://github.com/opaquecash/docs) | Developer docs ([docs.opaque.cash](https://docs.opaque.cash)) |
-
 ## Status
 
 Every layer above is **live on testnet** (Ethereum Sepolia + Solana devnet) with
